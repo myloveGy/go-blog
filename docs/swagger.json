@@ -1,0 +1,87 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "GO编程之旅：一起用GO做项目",
+        "title": "GO博客项目",
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/tags/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取标签详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "标签ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/model.Tag"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "error.Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Tag": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "标签名称",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态 10 启用 5 停用",
+                    "type": "integer"
+                },
+                "tag_id": {
+                    "description": "tag_id",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "description": "修改时间",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

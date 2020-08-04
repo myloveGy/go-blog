@@ -1,0 +1,58 @@
+definitions:
+  error.Error:
+    properties:
+      code:
+        type: integer
+      details:
+        items:
+          type: string
+        type: array
+      msg:
+        type: string
+    type: object
+  model.Tag:
+    properties:
+      created_at:
+        description: 创建时间
+        type: string
+      name:
+        description: 标签名称
+        type: string
+      status:
+        description: 状态 10 启用 5 停用
+        type: integer
+      tag_id:
+        description: tag_id
+        type: integer
+      updated_at:
+        description: 修改时间
+        type: string
+    type: object
+info:
+  contact: {}
+  description: GO编程之旅：一起用GO做项目
+  license: {}
+  title: GO博客项目
+  version: "1.0"
+paths:
+  /api/v1/tags/{id}:
+    get:
+      parameters:
+      - description: 标签ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: 获取标签详情
+swagger: "2.0"

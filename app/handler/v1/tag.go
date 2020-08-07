@@ -3,6 +3,9 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 
+	"blog/app/request"
+	"blog/app/service"
+	"blog/global"
 	"blog/pkg/app"
 	error2 "blog/pkg/error"
 )
@@ -24,7 +27,62 @@ func (t Tag) Get(c *gin.Context) {
 	return
 }
 
-func (t Tag) List(c *gin.Context)   {}
-func (t Tag) Create(c *gin.Context) {}
+func (t Tag) List(c *gin.Context) {
+	var params request.TagListRequest
+	response := app.NewResponse(c)
+	valid, errs := app.BindAndValid(c, &params)
+	if valid {
+		global.Logger.ErrorFormat(" app.BindAndValid errs: %v", errs)
+		response.ToErrorResponse(error2.InvalidParams.WithDetails(errs.Errors()...))
+		return
+	}
+
+	svc := service.New(c.Request.Context())
+	pager := app.Pager{
+		Page:     app.GetPage(c),
+		PageSize: app.GetPageSize(c),
+	}
+
+	total, err := svc.TagCount(&request.TagCountRequest{
+		Name:   params.Name,
+		Status: params.Status,
+	})
+	if err != nil {
+		global.Logger.ErrorFormat("svc.TagCount err: %v", err)
+		response.ToErrorResponse(error2.ErrorTagCountFail)
+		return
+	}
+
+	tags, err := svc.TagGetList(&params, &pager)
+	if err != nil {
+		global.Logger.ErrorFormat("svc.TagGetList err: %v", err)
+		response.ToErrorResponse(error2.ErrorTagListFail)
+		return
+	}
+
+	response.ToResponseList(tags, total)
+	return
+}
+
+func (t Tag) Create(c *gin.Context) {
+	var params request.TagCreateRequest
+	response := app.NewResponse(c)
+	valid, errs := app.BindAndValid(c, &params)
+	if valid {
+		global.Logger.ErrorFormat(" app.BindAndValid errs: %v", errs)
+		response.ToErrorResponse(error2.InvalidParams.WithDetails(errs.Errors()...))
+		return
+	}
+
+	svc := service.New(c.Request.Context())
+	if err := svc.TagCreate(&params); err != nil {
+		global.Logger.ErrorFormat("svc.TagCreate err: %v", err)
+		response.ToErrorResponse(error2.ErrorTagCreateFail)
+		return
+	}
+
+	response.ToResponse(gin.H{"tag_id": svc})
+	return
+}
 func (t Tag) Update(c *gin.Context) {}
 func (t Tag) Delete(c *gin.Context) {}

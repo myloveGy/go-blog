@@ -75,13 +75,14 @@ func (t Tag) Create(c *gin.Context) {
 	}
 
 	svc := service.New(c.Request.Context())
-	if err := svc.TagCreate(&params); err != nil {
+	tag, err := svc.TagCreate(&params)
+	if err != nil {
 		global.Logger.ErrorFormat("svc.TagCreate err: %v", err)
 		response.ToErrorResponse(error2.ErrorTagCreateFail)
 		return
 	}
 
-	response.ToResponse(gin.H{"tag_id": svc})
+	response.ToResponse(gin.H{"tag_id": tag.TagId})
 	return
 }
 func (t Tag) Update(c *gin.Context) {}

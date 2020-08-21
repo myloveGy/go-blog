@@ -36,6 +36,10 @@ func (t Tag) Count(db *gorm.DB) (int, error) {
 	return count, nil
 }
 
+func (t *Tag) First(db *gorm.DB) error {
+	return db.First(t).Error
+}
+
 func (t Tag) List(db *gorm.DB, offset, size int) ([]*Tag, error) {
 	var tags []*Tag
 	var err error
@@ -60,9 +64,9 @@ func (t *Tag) Create(db *gorm.DB) error {
 }
 
 func (t *Tag) Update(db *gorm.DB, values interface{}) error {
-	return db.Model(t).Where("tag_id = ?", t.TagId).Updates(values).Error
+	return db.Model(t).Updates(values).Error
 }
 
 func (t Tag) Delete(db *gorm.DB) error {
-	return db.Where("tag_id = ?", t.TagId).Delete(&t).Error
+	return db.Delete(&t).Error
 }

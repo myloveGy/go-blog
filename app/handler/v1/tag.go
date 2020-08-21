@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"blog/app/request"
+	response2 "blog/app/response"
 	"blog/app/service"
 	"blog/global"
 	"blog/pkg/app"
@@ -82,7 +83,7 @@ func (t Tag) Create(c *gin.Context) {
 		return
 	}
 
-	response.ToResponse(gin.H{"tag_id": tag.TagId})
+	response.ToResponse(response2.NewTagResponse(tag))
 	return
 }
 func (t Tag) Update(c *gin.Context) {}

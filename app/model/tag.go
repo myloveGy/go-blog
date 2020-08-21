@@ -7,11 +7,11 @@ import (
 )
 
 type Tag struct {
-	TagId     int       `json:"tag_id" db:"tag_id" gorm:"primary_key"` // tag_id
-	Name      string    `json:"name" db:"name"`                        // 标签名称
-	Status    uint8     `json:"status" db:"status"`                    // 状态 10 启用 5 停用
-	CreatedAt time.Time `json:"created_at" db:"created_at"`            // 创建时间
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`            // 修改时间
+	TagId     int       `json:"tag_id" db:"tag_id" gorm:"primary_key"`                             // tag_id
+	Name      string    `json:"name" db:"name"`                                                    // 标签名称
+	Status    uint8     `json:"status" db:"status"`                                                // 状态 10 启用 5 停用
+	CreatedAt time.Time `json:"created_at" db:"created_at" gorm:"type:datetime;column:created_at"` // 创建时间
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at" gorm:"type:datetime;column:updated_at"` // 修改时间
 }
 
 func (*Tag) TableName() string {
@@ -55,12 +55,12 @@ func (t Tag) List(db *gorm.DB, offset, size int) ([]*Tag, error) {
 	return tags, nil
 }
 
-func (t Tag) Create(db *gorm.DB) error {
-	return db.Create(&t).Error
+func (t *Tag) Create(db *gorm.DB) error {
+	return db.Create(t).Error
 }
 
-func (t Tag) Update(db *gorm.DB, values interface{}) error {
-	return db.Model(&t).Where("tag_id = ?", t.TagId).Updates(values).Error
+func (t *Tag) Update(db *gorm.DB, values interface{}) error {
+	return db.Model(t).Where("tag_id = ?", t.TagId).Updates(values).Error
 }
 
 func (t Tag) Delete(db *gorm.DB) error {

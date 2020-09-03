@@ -42,6 +42,12 @@ type DatabaseSettingS struct {
 	MaxOpenConns int
 }
 
+type JwtSettingS struct {
+	Secret string
+	Issuer string
+	Expire time.Duration
+}
+
 func NewSetting() (*Setting, error) {
 	vp := viper.New()
 	vp.SetConfigName("config")

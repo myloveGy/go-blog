@@ -35,6 +35,11 @@ func setupSetting() error {
 		return err
 	}
 
+	if err = configSetting.ReadSection("JWT", &global.JwtSetting); err != nil {
+		return err
+	}
+	global.JwtSetting.Expire *= time.Second
+
 	if err = configSetting.ReadSection("Server", &global.ServerSetting); err != nil {
 		return err
 	}

@@ -25,4 +25,6 @@ var (
 	ArticleUpdateFail = NewError(60103, "修改文章失败")
 	ArticleDeleteFail = NewError(60104, "删除文章失败")
 	ArticleListFail   = NewError(60105, "获取文章列表失败")
+
+	UploadFileFail = NewError(70000, "上传文件失败")
 )

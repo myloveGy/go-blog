@@ -1,12 +1,16 @@
 package routers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"blog/app/handler"
 	v1 "blog/app/handler/v1"
 	"blog/app/middleware"
+	"blog/global"
 
 	_ "blog/docs"
 )
@@ -18,6 +22,9 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Translations())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	upload := handler.NewUpload()
+	r.POST("/upload/file", upload.UploadFile)
+	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 	apiV1 := r.Group("api/v1")
 	{
 		tag := v1.NewTag()

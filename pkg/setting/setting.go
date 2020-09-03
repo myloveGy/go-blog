@@ -1,8 +1,9 @@
 package setting
 
 import (
-	"github.com/spf13/viper"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type Setting struct {
@@ -17,11 +18,15 @@ type ServerSettingS struct {
 }
 
 type AppSettingS struct {
-	DefaultPageSize int
-	MaxPageSize     int
-	LogSavePath     string
-	LogFileName     string
-	LogFileExt      string
+	DefaultPageSize      int
+	MaxPageSize          int
+	LogSavePath          string
+	LogFileName          string
+	LogFileExt           string
+	UploadSavePath       string
+	UploadServerUrl      string
+	UploadImageMaxSize   int
+	UploadImageAllowExts []string
 }
 
 type DatabaseSettingS struct {
@@ -40,7 +45,7 @@ type DatabaseSettingS struct {
 func NewSetting() (*Setting, error) {
 	vp := viper.New()
 	vp.SetConfigName("config")
-	vp.AddConfigPath("configs/")
+	vp.AddConfigPath("/go-project/blog/configs/")
 	vp.SetConfigType("yaml")
 	err := vp.ReadInConfig()
 	if err != nil {

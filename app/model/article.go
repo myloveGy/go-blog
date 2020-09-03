@@ -40,6 +40,7 @@ func (*Article) PK() string {
 }
 
 func (a *Article) Create(db *gorm.DB) (*Article, error) {
+	a.DeletedAt = time.Now()
 	if err := db.Create(a).Error; err != nil {
 		return nil, err
 	}

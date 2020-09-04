@@ -187,6 +187,8 @@ func TestCreateSavePath(t *testing.T) {
 			}
 		})
 	}
+
+	os.Remove("/go-project/blog/storage/upload")
 }
 
 func TestCheckMaxSize(t *testing.T) {

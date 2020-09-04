@@ -1,7 +1,7 @@
 package request
 
 type TagListRequest struct {
-	Name   string `form:"name" binding:"min=2,max=100"`
+	Name   string `form:"name" binding:"max=100"`
 	Status uint8  `form:"status,default=10" binding:"oneof=5 10"`
 }
 

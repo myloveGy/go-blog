@@ -22,11 +22,13 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Translations())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	r.GET("/auth", handler.GetApp)
 	upload := handler.NewUpload()
 	r.POST("/upload/file", upload.UploadFile)
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 	apiV1 := r.Group("api/v1")
 	{
+		apiV1.Use(middleware.JWT())
 		tag := v1.NewTag()
 
 		// 标签处理
